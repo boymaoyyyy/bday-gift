@@ -1,103 +1,337 @@
+"use client";
+
+import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+// Simple SVG for cake (you can replace with an image if you want)
+const Cake = () => (
+  <svg width="100" height="100" viewBox="0 0 64 64" fill="none">
+    <rect x="12" y="36" width="40" height="20" rx="8" fill="#F9C2D8"/>
+    <rect x="16" y="28" width="32" height="12" rx="6" fill="#AEE2F9"/>
+    <ellipse cx="32" cy="28" rx="16" ry="4" fill="#F9C2D8"/>
+    <rect x="28" y="16" width="8" height="12" rx="4" fill="#F9E2A2"/>
+    <circle cx="32" cy="16" r="2" fill="#F9E2A2"/>
+  </svg>
+);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+const balloons = [
+  { color: "#1976D2", left: "10%", delay: "0s" },
+  { color: "#D32F2F", left: "25%", delay: "1s" },
+  { color: "#388E3C", left: "70%", delay: "0.5s" },
+  { color: "#FBC02D", left: "85%", delay: "1.5s" },
+  { color: "#7B1FA2", left: "40%", delay: "0.7s" },
+  { color: "#C2185B", left: "60%", delay: "1.2s" },
+];
+
+const gifts = [
+  { color: "#D32F2F", left: "15%" },
+  { color: "#1976D2", left: "30%" },
+  { color: "#388E3C", left: "70%" },
+  { color: "#FBC02D", left: "85%" },
+];
+
+const Balloon = ({ color, left, delay }: any) => (
+  <div
+    style={{
+      position: "absolute",
+      left,
+      top: 0,
+      animation: `float 6s ease-in-out infinite`,
+      animationDelay: delay,
+      zIndex: 1,
+    }}
+  >
+    <div
+      style={{
+        width: 60,
+        height: 80,
+        background: color,
+        borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%",
+        boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+        border: "2px solid #fff",
+      }}
+    />
+    <div
+      style={{
+        width: 2,
+        height: 30,
+        background: "#aaa",
+        margin: "0 auto",
+      }}
+    />
+  </div>
+);
+
+const Gift = ({ color, left }: any) => (
+  <div
+    style={{
+      position: "absolute",
+      left,
+      bottom: 0,
+      zIndex: 2,
+    }}
+  >
+    <div
+      style={{
+        width: 50,
+        height: 35,
+        background: color,
+        borderRadius: 10,
+        border: "2px solid #fff",
+        position: "relative",
+      }}
+    />
+    <div
+      style={{
+        width: 30,
+        height: 10,
+        background: "#fff",
+        borderRadius: 5,
+        position: "absolute",
+        top: -10,
+        left: 10,
+      }}
+    />
+  </div>
+);
+
+const Confetti = () => {
+  const [confettiPieces, setConfettiPieces] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Only run on client
+    const colors = ["#1976D2", "#D32F2F", "#388E3C", "#FBC02D", "#7B1FA2", "#C2185B", "#512DA8", "#FFA000"];
+    const pieces = Array.from({ length: 60 }).map((_, i) => ({
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      color: colors[i % colors.length],
+      delay: `${Math.random() * 2}s`,
+    }));
+    setConfettiPieces(pieces);
+  }, []);
+
+  return (
+    <div>
+      {confettiPieces.map((piece, i) => (
+        <div
+          key={i}
+          style={{
+            position: "absolute",
+            left: piece.left,
+            top: piece.top,
+            width: 6,
+            height: 6,
+            background: piece.color,
+            borderRadius: "50%",
+            opacity: 0.7,
+            animation: "fall 3s linear infinite",
+            animationDelay: piece.delay,
+          }}
+        />
+      ))}
     </div>
   );
-}
+};
+
+const BirthdayPage = () => {
+  // Music controls
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [playing, setPlaying] = useState(false);
+  const [revealed, setRevealed] = useState(false);
+
+  const handleToggleMusic = () => {
+    if (!audioRef.current) return;
+    if (playing) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setPlaying(!playing);
+  };
+
+  // Start music when revealed
+  useEffect(() => {
+    if (revealed && audioRef.current) {
+      audioRef.current.play();
+      setPlaying(true);
+    }
+  }, [revealed]);
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #e0f7fa 0%, #fffde4 100%)",
+        position: "relative",
+        overflow: "hidden",
+        fontFamily: "sans-serif",
+        padding: "16px 0",
+      }}
+    >
+      {/* Black overlay with button */}
+      {!revealed && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "#000",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            transition: "opacity 0.7s",
+          }}
+        >
+          <button
+            onClick={() => setRevealed(true)}
+            className="reveal-btn"
+            style={{
+              background: "linear-gradient(90deg, #2196f3, #00bcd4)",
+              color: "#fff",
+              fontSize: 28,
+              fontWeight: 700,
+              padding: "24px 48px",
+              border: "none",
+              borderRadius: 16,
+              boxShadow: "0 4px 32px rgba(0,0,0,0.3)",
+              cursor: "pointer",
+              transition: "transform 0.2s, box-shadow 0.2s",
+            }}
+          >
+            Click to open the surprise
+          </button>
+        </div>
+      )}
+
+      {/* Balloons, Confetti, Gifts */}
+      {revealed && (
+        <>
+          {balloons.map((b, i) => (
+            <Balloon key={i} {...b} />
+          ))}
+          <Confetti />
+          {gifts.map((g, i) => (
+            <Gift key={i} {...g} />
+          ))}
+        </>
+      )}
+
+      {/* Main Card with animation */}
+      <div
+        style={{
+          maxWidth: 400,
+          width: "95vw",
+          margin: "0 auto",
+          marginTop: 60,
+          background: "rgba(255,255,255,0.95)",
+          borderRadius: 24,
+          boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
+          padding: 24,
+          textAlign: "center",
+          position: "relative",
+          zIndex: 10,
+          opacity: revealed ? 1 : 0,
+          transform: revealed ? "scale(1)" : "scale(0.95)",
+          transition: "opacity 0.7s, transform 0.7s",
+        }}
+      >
+        <h1 style={{ fontSize: 28, fontWeight: 700, color: "#2d3a4a", marginBottom: 8 }}>
+          HAPPY BIRTHDAY
+        </h1>
+        <p style={{ color: "#4a4a4a", marginBottom: 16, fontSize: 16 }}>
+        Happy Birthday, titaaa! Wishing you a day filled with love, laughter, and all the joy you bring to those around you. Thank you for raising such a wonderful daughter—she's a reflection of your kindness and strength. Have a beautiful celebration!
+        </p>
+        <div style={{ fontWeight: 700, fontSize: 22, color: "#2d3a4a", marginBottom: 16 }}>
+          Tita
+        </div>
+        {/* Centered Cake */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
+          <Cake />
+        </div>
+      </div>
+
+      {/* Image below the card */}
+      <div
+        style={{
+          margin: "32px auto 0",
+          textAlign: "center",
+          zIndex: 10,
+          position: "relative",
+          opacity: revealed ? 1 : 0,
+          transform: revealed ? "scale(1)" : "scale(0.95)",
+          transition: "opacity 0.7s 0.1s, transform 0.7s 0.1s",
+        }}
+      >
+        <Image
+          src="/Bdaypic.jpg"
+          alt="Birthday"
+          width={220}
+          height={220}
+          style={{
+            borderRadius: 16,
+            boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
+            maxWidth: "90vw",
+            height: "auto",
+            margin: "0 auto",
+          }}
+          priority
+        />
+      </div>
+
+      {/* Music controls */}
+      <audio
+        ref={audioRef}
+        src="/happy-birthday.mp3"
+        loop
+        style={{ display: "none" }}
+      />
+      {revealed && (
+        <button
+          onClick={handleToggleMusic}
+          style={{
+            position: "fixed",
+            bottom: 24,
+            right: 24,
+            zIndex: 100,
+            background: "#fff",
+            border: "none",
+            borderRadius: "50%",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.10)",
+            width: 48,
+            height: 48,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 24,
+          }}
+          aria-label={playing ? "Pause music" : "Play music"}
+        >
+          {playing ? "⏸️" : "▶️"}
+        </button>
+      )}
+
+      {/* Animations */}
+      <style>
+        {`
+          @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
+            100% { transform: translateY(0); }
+          }
+          @keyframes fall {
+            0% { transform: translateY(-100px); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+          }
+          .reveal-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 32px 8px #00bcd4;
+            filter: brightness(1.1);
+          }
+        `}
+      </style>
+    </div>
+  );
+};
+
+export default BirthdayPage;
