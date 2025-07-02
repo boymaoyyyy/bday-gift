@@ -3,6 +3,24 @@
 import React, { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 
+type ConfettiPiece = {
+  left: string;
+  top: string;
+  color: string;
+  delay: string;
+};
+
+type BalloonProps = {
+  color: string;
+  left: string;
+  delay: string;
+};
+
+type GiftProps = {
+  color: string;
+  left: string;
+};
+
 // Simple SVG for cake (you can replace with an image if you want)
 const Cake = () => (
   <svg width="100" height="100" viewBox="0 0 64 64" fill="none">
@@ -30,7 +48,7 @@ const gifts = [
   { color: "#FBC02D", left: "85%" },
 ];
 
-const Balloon = ({ color, left, delay }: any) => (
+const Balloon = ({ color, left, delay }: BalloonProps) => (
   <div
     style={{
       position: "absolute",
@@ -62,7 +80,7 @@ const Balloon = ({ color, left, delay }: any) => (
   </div>
 );
 
-const Gift = ({ color, left }: any) => (
+const Gift = ({ color, left }: GiftProps) => (
   <div
     style={{
       position: "absolute",
@@ -96,7 +114,7 @@ const Gift = ({ color, left }: any) => (
 );
 
 const Confetti = () => {
-  const [confettiPieces, setConfettiPieces] = useState<any[]>([]);
+  const [confettiPieces, setConfettiPieces] = useState<ConfettiPiece[]>([]);
 
   useEffect(() => {
     // Only run on client
@@ -237,13 +255,13 @@ const BirthdayPage = () => {
         }}
       >
         <h1 style={{ fontSize: 28, fontWeight: 700, color: "#2d3a4a", marginBottom: 8 }}>
-          HAPPY BIRTHDAY
+          HAPPY BIRTHDAY TITAAAA!
         </h1>
         <p style={{ color: "#4a4a4a", marginBottom: 16, fontSize: 16 }}>
-        Happy Birthday, titaaa! Wishing you a day filled with love, laughter, and all the joy you bring to those around you. Thank you for raising such a wonderful daughter—she's a reflection of your kindness and strength. Have a beautiful celebration!
+          Happy Birthday, Ma&apos;am! Wishing you a day filled with love, laughter, and all the joy you bring to those around you. Thank you for raising such a wonderful daughter—she&apos;s a reflection of your kindness and strength. Have a beautiful celebration!
         </p>
         <div style={{ fontWeight: 700, fontSize: 22, color: "#2d3a4a", marginBottom: 16 }}>
-          Tita
+          
         </div>
         {/* Centered Cake */}
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 8 }}>
