@@ -258,7 +258,7 @@ const BirthdayPage = () => {
           HAPPY BIRTHDAY TITAAAA!
         </h1>
         <p style={{ color: "#4a4a4a", marginBottom: 16, fontSize: 16 }}>
-          Happy Birthday, Ma&apos;am! Wishing you a day filled with love, laughter, and all the joy you bring to those around you. Thank you for raising such a wonderful daughter—she&apos;s a reflection of your kindness and strength. Have a beautiful celebration!
+          Happy Birthday, Titaaaa! Wishing you a day filled with love, laughter, and all the joy you bring to those around you. Thank you for raising such a wonderful daughter—she&apos;s a reflection of your kindness and strength. Have a beautiful celebration!
         </p>
         <div style={{ fontWeight: 700, fontSize: 22, color: "#2d3a4a", marginBottom: 16 }}>
           
